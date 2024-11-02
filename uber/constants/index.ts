@@ -77,14 +77,14 @@ export const onboarding = [
         id: 1,
         title: "The perfect ride is just a tap away !",
         description:
-            "Your journey begins with DEVDES. Find your ideal ride effortlessly.",
+            "Your journey begins with Drivio. Find your ideal ride effortlessly.",
         image: images.onboarding1,
     },
     {
         id: 2,
-        title: "Best car in your hands with DEVDES",
+        title: "Best car in your hands with Drivio",
         description:
-            "Discover the convenience of finding your perfect ride with DEVDES",
+            "Discover the convenience of finding your perfect ride with Drivio",
         image: images.onboarding2,
     },
     {
