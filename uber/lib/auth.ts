@@ -7,7 +7,7 @@ export interface TokenCache {
 }
 
 // Token cache to store and retrieve tokens securely
-const tokenCache = {
+export const tokenCache = {
     async getToken(key: string) {
       try {
         const item = await SecureStore.getItemAsync(key)

@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, TouchableWithoutFeedback, View, Text, Image, TextInput, Platform, Keyboard } from "react-native";
 
-const InputField = ({ label, labelStyle, icon, containerStyle, iconStyle, inputStyle, secureTextEntry, placeholder, value, onChangeText, ...props}: any) => {
+const InputField = ({ label, labelStyle, icon, containerStyle, iconStyle, inputStyle, secureTextEntry, placeholder, value, onChangeText, keyboardType, ...props}: any) => {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "iso" ? "padding" : "height"}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -14,6 +14,7 @@ const InputField = ({ label, labelStyle, icon, containerStyle, iconStyle, inputS
                             value={value}
                             onChangeText={onChangeText}
                             secureTextEntry={secureTextEntry}
+                            keyboardType={keyboardType}
                             {...props}
                         />
                     </View>

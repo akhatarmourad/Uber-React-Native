@@ -32,6 +32,8 @@ import onboarding1 from "@/assets/images/onboarding1.png";
 import onboarding2 from "@/assets/images/onboarding2.png";
 import onboarding3 from "@/assets/images/onboarding3.png";
 import signUpCar from "@/assets/images/signup-car.png";
+import logoWhite from "@/assets/images/logo-white.png";
+import logoGreen from "@/assets/images/logo-green.png";
 
 export const images = {
     onboarding1,
@@ -42,6 +44,8 @@ export const images = {
     check,
     noResult,
     message,
+    logoWhite,
+    logoGreen,
 };
 
 export const icons = {

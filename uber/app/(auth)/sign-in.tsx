@@ -1,20 +1,44 @@
 /* eslint-disable prettier/prettier */
-import { useState } from "react";
+import React, { useState } from "react";
 import InputField from "@/components/InputField";
 import { icons, images } from "@/constants";
-import { Text, View, ScrollView, Image } from "react-native"
+import { Text, View, ScrollView, Image } from "react-native";
+import { useSignIn } from '@clerk/clerk-expo'
+import { Link, useRouter } from 'expo-router';
 import OAuth from "@/components/OAuth";
-import { Link } from "expo-router";
 import CustomButton from "@/components/CustomButton";
 
 const SignIn = () => {
 
   const [form, setForm] = useState({
-    username: "",
-    password: ""
+    email: "",
+    password: "",
   });
 
-  const onSignInPress = async () => {}
+  const { signIn, setActive, isLoaded } = useSignIn();
+  const router = useRouter();
+
+  const onSignInPress = React.useCallback(async () => {
+    if (!isLoaded) {
+      return
+    }
+
+    try {
+      const signInAttempt = await signIn.create({
+        identifier: form.email,
+        password:form.password,
+      })
+
+      if (signInAttempt.status === 'complete') {
+        await setActive({ session: signInAttempt.createdSessionId })
+        router.replace('/(root)/(tabs)/home');
+      } else {
+        console.error(JSON.stringify(signInAttempt, null, 2))
+      }
+    } catch (err: any) {
+      console.error(JSON.stringify(err, null, 2))
+    }
+  }, [isLoaded, form.email, form.password])
 
   return (
     <ScrollView className="flex-1 bg-white">
@@ -22,23 +46,26 @@ const SignIn = () => {
           {/* Image & Title */}
           <View className="relative w-full h-[250px]">
             <Image source={images.signUpCar} className="z-0 w-full h-[250px]" />
-            <Text className="absolute bottom-5 left-5 text-2xl font-JakartaBold text-green-500">Welcome 😎</Text>
+            <View className="flex flex-row items-end justify-start gap-x-2 absolute left-5 bottom-5">
+              <Text className="text-3xl font-JakartaBold text-black">Welcome to</Text>
+              <Text className="text-3xl font-JakartaBold text-green-500">Drivio</Text>
+            </View>
           </View>
 
           {/* Input fields */}
           <View className="p-5">
             <InputField 
               label="Email"
-              placeholder="Enter your email"
+              placeholder="Enter Email"
               icon={icons.person}
-              value={form.username}
-              onChangeText={(value: any) => setForm({...form, username: value})}
+              value={form.email}
+              onChangeText={(value: any) => setForm({...form, email: value})}
               secureTextEntry={false}
             />
 
             <InputField 
               label="Password"
-              palceholder="Enter your password"
+              placeholder="Enter Password"
               icon={icons.lock}
               value={form.password}
               onChangeText={(value: any) => setForm({...form, password: value})}

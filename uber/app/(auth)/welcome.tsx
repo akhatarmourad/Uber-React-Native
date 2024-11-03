@@ -52,7 +52,7 @@ const Welcome = () => {
             <CustomButton 
                 title={isLastSlide ? "Get Started" : "Next"}
                 onPress={() => isLastSlide ? router.replace("/(auth)/sign-up") : swiperRef.current?.scrollBy(1)} 
-                className="w-full mx-5 mt-10 mb-5" 
+                className="w-[90vw] mx-auto mt-10 mb-5" 
             />
         </SafeAreaView>
     );
