@@ -9,6 +9,7 @@ import OAuth from "@/components/OAuth";
 import { useSignUp } from '@clerk/clerk-expo';
 import { useRouter } from 'expo-router';
 import { ReactNativeModal } from "react-native-modal";
+import { fetchAPI } from "@/lib/fetch";
 
 const SignUp = () => {
 
@@ -51,6 +52,16 @@ const SignUp = () => {
             const completeSignUp = await signUp.attemptEmailAddressVerification({ code: verification.code });
 
             if (completeSignUp.status === 'complete') {
+                // Add user to DB 
+                await fetchAPI("/(api)/user", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        username: form.username,
+                        email: form.email,
+                        clerkId: completeSignUp.createdUserId
+                    }),
+                });
+
                 await setActive({ session: completeSignUp.createdSessionId });
                 setVerification({...verification, state: "success"});
               } else {
