@@ -1,11 +1,13 @@
 /* eslint-disable prettier/prettier */
 import { useState } from "react";
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo';
-import { FlatList, Image, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from 'expo-router';
 import RideCard from '@/components/RideCard';
-import { images } from "@/constants";
+import { icons, images } from "@/constants";
+import GoogleSearchInput from "@/components/GoogleSearchInput";
+import Map from "@/components/Map";
 
 
 const recentRides = [
@@ -112,18 +114,66 @@ const Home = () => {
     const { user } = useUser();
     const [loading, setLoading] = useState(false);
 
+    const handleSignOut = () => {}
+
+    const handleDestPress = () => {}
+
     return (
-        <SafeAreaView className='bg-[#F6F8FA] flex-1'>
+        <SafeAreaView className='bg-[#F6F8FA] flex-1 relative'>
             <SignedIn>
+                <View className="w-full  h-[40vh] bg-greient-to-t from-white to-transparent bottom-0 absolute z-10" />
                 <FlatList 
                     data={recentRides.slice(0, 5)}
                     renderItem={({ item }) => <RideCard ride={item} />}
                     contentContainerStyle={{ paddingBottom: 100 }}
                     keyboardShouldPersistTaps="handled"
                     ListEmptyComponent={ () => (
-                        <View className="flex items-center justify-center p-4 rounded-xl bg-yellow-50 border border-yellow-500">
-                            <Text className='text-center text-yellow-500 text-lg font-JakartaMedium'>No Rides Yet</Text>
-                            <Image source={images.noResult} className="w-35 h-35" alt="No Recent Rides" />
+                        <View className="flex items-center justify-center">
+                            {!loading ? (
+                                <View className="flex items-center justify-center p-4 rounded-xl bg-yellow-50 border border-yellow-500">
+                                    <Text className='text-center text-yellow-500 text-lg font-JakartaMedium'>No Rides Yet</Text>
+                                    <Image source={images.noResult} className="w-35 h-35" alt="No Recent Rides" />
+                                </View>
+                            ) : (
+                                <View className="flex flex-col flex-1 items-center justify-center">
+                                    <ActivityIndicator size="large" color="#22c55e" />
+                                    <Text className="text-sm text-center">Loading Data...</Text>
+                                </View>
+                            )}
+                        </View>
+                    )}
+
+                    ListHeaderComponent={() => (
+                        <View className="p-3">
+                            <View className="flex flex-row items-center justify-between my-5">
+                                <Text className="text-xl font-JakartaBold capitalize">
+                                    Welcome{" "}
+                                    {user?.firstName || user?.emailAddresses[0]?.emailAddress.slice(0, 6)}
+                                </Text>
+
+                                <TouchableOpacity onPress={handleSignOut} className="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm">
+                                    <Image source={icons.out} className="w-4 h-4" alt="Logout Icon" />
+                                </TouchableOpacity>
+                            </View>
+
+                            {/* Google Search Bar */}
+                            <GoogleSearchInput
+                                icon={icons.search}
+                                containerStyle="bg-white shadow-md shadow-neutral-300"
+                                handlePress={handleDestPress}
+                                textInputBackgroundColor="bg-white"
+                            />
+
+                            {/* Current Location */}
+                            <View className="my-5 flex flex-1">
+                                <Text className="font-JakartaBold text-green-500 text-xl mb-3">Your Current Location</Text>
+                                <View className="bg-white flex flex-row items-center justify-center h-[300px] w-full rounded-xl overflow-hidden">
+                                    <Map />
+                                </View>
+                            </View>
+
+                            {/* Recent Rides Title */}
+                            <Text className="font-JakartaBold text-green-500 text-xl mb-3">Recent Rides</Text>
                         </View>
                     )}
                 />

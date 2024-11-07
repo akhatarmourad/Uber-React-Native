@@ -41,18 +41,18 @@ const RideCard = ({ride: {
 
                     <View className="flex flex-row items-center justify-between w-full py-3 border-b border-gray-100">
                         <Text className="text-md font-JakartaMedium text-gray-800">Driver</Text>
-                        <Text className="text-md font-JakartaMedium text-gray-400">23-10-2024</Text>
+                        <Text className="text-md font-JakartaMedium text-gray-400">{driver?.first_name} {driver?.last_name}</Text>
                     </View>
 
                     <View className="flex flex-row items-center justify-between w-full py-3 border-b border-gray-100">
                         <Text className="text-md font-JakartaMedium text-gray-800">Car Seats</Text>
-                        <Text className="text-md font-JakartaMedium text-gray-400">23-10-2024</Text>
+                        <Text className="text-md font-JakartaMedium text-gray-400">{driver?.car_seats}</Text>
                     </View>
 
                     <View className="flex flex-row items-center justify-between w-full pt-3">
                         <Text className="text-md font-JakartaMedium text-gray-800">Payment Status</Text>
                         <Text 
-                            className={`flex items-center justify-center text-center text-md text-white px-[10px] pt-[2px] pb-[3px] capitalize font-JakartaMedium rounded-full ${payment_status === "paid" ? "bg-green-100 border border-green-500 text-green-500" : "bg-red-100 border border-red-500 text-red-500"}`}
+                            className={`flex items-center justify-center text-center text-md px-[10px] pt-[2px] pb-[3px] capitalize font-JakartaMedium rounded-full ${payment_status === "paid" ? "bg-green-100 border border-green-500 text-green-500" : "bg-red-100 border border-red-500 text-red-500"}`}
                         >
                             {payment_status}
                         </Text>
