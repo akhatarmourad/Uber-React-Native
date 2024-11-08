@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo';
 import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -8,6 +8,8 @@ import RideCard from '@/components/RideCard';
 import { icons, images } from "@/constants";
 import GoogleSearchInput from "@/components/GoogleSearchInput";
 import Map from "@/components/Map";
+import { useLocationStore } from "@/store";
+import * as Location from "expo-location";
 
 
 const recentRides = [
@@ -113,10 +115,36 @@ const Home = () => {
 
     const { user } = useUser();
     const [loading, setLoading] = useState(false);
+    const [hasPermissions, setHasPermissions] = useState(false);
+    const { setUserLocation, setDestinationLocation } = useLocationStore();
 
     const handleSignOut = () => {}
 
     const handleDestPress = () => {}
+
+    /* Use Effect to Load Infos */
+    useEffect(() => {
+        const requestLocation = async () => {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+
+            if(status !== "granted") {
+                setHasPermissions(false);
+                return;
+            }
+
+            const location = await Location.getCurrentPositionAsync();
+            const address = await Location.reverseGeocodeAsync({latitude: location?.coords?.latitude, longitude: location?.coords?.longitude});
+
+            setUserLocation({
+                address: `${address[0]?.name}, ${address[0]?.region}`,
+                latitude: location.coords?.latitude,
+                longitude: location.coords?.longitude,
+            });
+        }
+
+        requestLocation();
+    }, []);
+
 
     return (
         <SafeAreaView className='bg-[#F6F8FA] flex-1 relative'>
@@ -165,7 +193,7 @@ const Home = () => {
                             />
 
                             {/* Current Location */}
-                            <View className="my-5 flex flex-1">
+                            <View className="my-5">
                                 <Text className="font-JakartaBold text-green-500 text-xl mb-3">Your Current Location</Text>
                                 <View className="bg-white flex flex-row items-center justify-center h-[300px] w-full rounded-xl overflow-hidden">
                                     <Map />
